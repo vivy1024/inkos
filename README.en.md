@@ -20,7 +20,7 @@
 
 Open-source CLI agent that autonomously writes, audits, and revises novels — with human review gates that keep you in control.
 
-**Native English support** — InkOS writes English fiction out of the box with 10 built-in genre profiles: LitRPG, Progression Fantasy, Isekai, Cultivation, System Apocalypse, Dungeon Core, Romantasy, Sci-Fi, Tower Climber, and Cozy Fantasy. Each genre includes dedicated pacing rules, fatigue word lists, audit dimensions, and prohibition sets tuned for English-language web fiction.
+**Native English support！！！** — InkOS writes English fiction out of the box with 10 built-in genre profiles: LitRPG, Progression Fantasy, Isekai, Cultivation, System Apocalypse, Dungeon Core, Romantasy, Sci-Fi, Tower Climber, and Cozy Fantasy. Each genre includes dedicated pacing rules, fatigue word lists, audit dimensions, and prohibition sets tuned for English-language web fiction.
 
 ## Quick Start
 
@@ -55,10 +55,10 @@ inkos config set-global \
 
 # Example: OpenAI
 # inkos config set-global --provider openai --base-url https://api.openai.com/v1 --api-key sk-xxx --model gpt-4o
-# Example: Any OpenAI-compatible endpoint (proxies, Zhipu, Gemini, local models)
-# inkos config set-global --provider custom --base-url https://your-proxy.com/v1 --api-key sk-xxx --model gpt-4o
 # Example: Anthropic
 # inkos config set-global --provider anthropic --base-url https://api.anthropic.com --api-key sk-ant-xxx --model claude-sonnet-4-20250514
+# Example: Any OpenAI-compatible endpoint (proxies, local models, etc.)
+# inkos config set-global --provider custom --base-url https://your-endpoint.com/v1 --api-key sk-xxx --model gpt-4o
 ```
 
 Saved to `~/.inkos/.env`, shared by all projects. New projects just work without extra config.
@@ -73,7 +73,7 @@ inkos init my-novel     # Initialize project
 ```bash
 # Required
 INKOS_LLM_PROVIDER=                               # openai / anthropic / custom (use custom for any OpenAI-compatible API)
-INKOS_LLM_BASE_URL=                               # API endpoint (proxies, Zhipu, Gemini, local models all supported)
+INKOS_LLM_BASE_URL=                               # API endpoint
 INKOS_LLM_API_KEY=                                 # API Key
 INKOS_LLM_MODEL=                                   # Model name
 
@@ -100,15 +100,18 @@ Agents without explicit overrides fall back to the global model.
 
 ### Write Your First Book
 
+English is the default for English genre profiles. Pick a genre and go:
+
 ```bash
-inkos book create --title "The Last Delver" --genre litrpg --lang en  # Create an English book
+inkos book create --title "The Last Delver" --genre litrpg     # LitRPG novel (English by default)
 inkos write next my-book          # Write next chapter (full pipeline: draft → audit → revise)
 inkos status                      # Check status
 inkos review list my-book         # Review drafts
 inkos review approve-all my-book  # Batch approve
-inkos export my-book              # Export full book
 inkos export my-book --format epub  # Export EPUB (read on phone/Kindle)
 ```
+
+Language is set per-genre by default. Override explicitly with `--lang en` or `--lang zh`. Use `inkos genre list` to see all available genres and their default languages.
 
 <p align="center">
   <img src="assets/screenshot-terminal.png" width="700" alt="Terminal screenshot">
@@ -116,11 +119,34 @@ inkos export my-book --format epub  # Export EPUB (read on phone/Kindle)
 
 ---
 
+## English Genre Profiles
+
+InkOS ships with 10 English-native genre profiles. Each includes genre-specific rules, pacing, fatigue word detection, and audit dimensions:
+
+| Genre | Key Mechanics |
+|-------|--------------|
+| **LitRPG** | Numerical system, power scaling, stat progression |
+| **Progression Fantasy** | Power scaling, no numerical system required |
+| **Isekai** | Era research, world contrast, cultural fish-out-of-water |
+| **Cultivation** | Power scaling, realm progression |
+| **System Apocalypse** | Numerical system, survival mechanics |
+| **Dungeon Core** | Numerical system, power scaling, territory management |
+| **Romantasy** | Emotional arcs, dual POV pacing |
+| **Sci-Fi** | Era research, tech consistency |
+| **Tower Climber** | Numerical system, floor progression |
+| **Cozy Fantasy** | Low-stakes pacing, comfort-first tone |
+
+Also supports 5 Chinese web novel genres (xuanhuan, xianxia, urban, horror, other) for bilingual creators.
+
+Every genre includes a **fatigue word list** (e.g., "delve", "tapestry", "testament", "intricate", "pivotal" for LitRPG) — the auditor flags these automatically so your prose doesn't read like every other AI-generated novel.
+
+---
+
 ## Key Features
 
 ### 33-Dimension Audit + De-AI-ification
 
-The Continuity Auditor checks every draft across 33 dimensions: character memory, resource continuity, hook payoff, outline adherence, narrative pacing, emotional arcs, and more. Built-in AI-tell detection dimensions automatically catch "LLM voice" — overused words, monotonous sentence patterns, excessive summarization. Failed audits trigger an automatic revision loop.
+The Continuity Auditor checks every draft across 33 dimensions: character memory, resource continuity, hook payoff, outline adherence, narrative pacing, emotional arcs, and more. Built-in AI-tell detection automatically catches "LLM voice" — overused words, monotonous sentence patterns, excessive summarization. Failed audits trigger an automatic revision loop.
 
 De-AI-ification rules are baked into the Writer agent's prompts: fatigue word lists, banned patterns, style fingerprint injection — reducing AI traces at the source. `revise --mode anti-detect` runs dedicated anti-detection rewriting on existing chapters.
 
@@ -146,11 +172,11 @@ Different agents can use different models and providers. Writer on Claude (stron
 
 ### Daemon Mode + Notifications
 
-`inkos up` starts an autonomous background loop that writes chapters on a schedule. The pipeline runs fully unattended for non-critical issues, pausing for human review when needed. Notification support: Telegram, Feishu, WeCom, Webhook (HMAC-SHA256 signing + event filtering). Logs to `inkos.log` (JSON Lines), `-q` for quiet mode.
+`inkos up` starts an autonomous background loop that writes chapters on a schedule. The pipeline runs fully unattended for non-critical issues, pausing for human review when needed. Notifications via Telegram and Webhook (HMAC-SHA256 signing + event filtering). Logs to `inkos.log` (JSON Lines), `-q` for quiet mode.
 
 ### Local Model Compatibility
 
-Supports any OpenAI-compatible endpoint (`--provider custom`). Stream auto-fallback — when SSE isn't supported, InkOS retries with sync mode automatically. Fallback parser handles non-standard output from small models, and partial content recovery kicks in on stream interruption.
+Supports any OpenAI-compatible endpoint (`--provider custom`). Stream auto-fallback — when SSE isn't supported, InkOS retries with sync mode automatically. Fallback parser handles non-standard output from smaller models, and partial content recovery kicks in on stream interruption.
 
 ### Reliability
 
@@ -168,7 +194,7 @@ Each chapter is produced by five agents in sequence:
 
 | Agent | Responsibility |
 |-------|---------------|
-| **Radar** | Scans platform trends and reader preferences to inform story direction (pluggable, skippable) |
+| **Radar** | Scans platform trends and reader preferences to inform story direction. Pluggable via `RadarSource` interface — skip it or bring your own data source |
 | **Architect** | Plans chapter structure: outline, scene beats, pacing targets |
 | **Writer** | Produces prose from the plan + current world state (two-phase: creative writing → state settlement) |
 | **Continuity Auditor** | Validates the draft against 7 canonical truth files, 33-dimension check |
@@ -200,26 +226,7 @@ The Continuity Auditor checks every draft against these files. If a character "r
 
 The Writer agent has ~25 universal writing rules (character craft, narrative technique, logical consistency, language constraints, de-AI-ification), applicable to all genres.
 
-On top of that, each genre has dedicated rules (prohibitions, language rules, pacing, audit dimensions), and each book has its own `book_rules.md` (protagonist personality, numerical caps, custom prohibitions) and `story_bible.md` (worldbuilding), auto-generated by the Architect agent.
-
-### English Genre Profiles
-
-InkOS ships with 10 English-native genre profiles, each with genre-specific rules, pacing, fatigue words, and audit dimensions:
-
-| Genre | Key Mechanics |
-|-------|--------------|
-| **LitRPG** | Numerical system, power scaling, stat progression |
-| **Progression Fantasy** | Power scaling, no numerical system required |
-| **Isekai** | Era research, world contrast, cultural fish-out-of-water |
-| **Cultivation** | Power scaling, realm progression |
-| **System Apocalypse** | Numerical system, survival mechanics |
-| **Dungeon Core** | Numerical system, power scaling, territory management |
-| **Romantasy** | Emotional arcs, dual POV pacing |
-| **Sci-Fi** | Era research, tech consistency |
-| **Tower Climber** | Numerical system, floor progression |
-| **Cozy Fantasy** | Low-stakes pacing, comfort-first tone |
-
-Plus 5 Chinese web novel genres (xuanhuan, xianxia, urban, horror, other). Use `--lang en` or `--lang zh` to set the writing language, or let the genre default decide.
+On top of that, each genre has dedicated rules (prohibitions, language constraints, pacing, audit dimensions), and each book has its own `book_rules.md` (protagonist personality, numerical caps, custom prohibitions) and `story_bible.md` (worldbuilding), auto-generated by the Architect agent.
 
 ## Usage Modes
 
@@ -235,7 +242,7 @@ inkos write next my-book --count 5    # Write 5 chapters in sequence
 ### 2. Atomic Commands (Composable, External Agent Friendly)
 
 ```bash
-inkos draft my-book --context "Focus on master-disciple conflict" --json
+inkos draft my-book --context "Focus on the dungeon boss encounter and party dynamics" --json
 inkos audit my-book 31 --json
 inkos revise my-book 31 --json
 ```
@@ -246,8 +253,8 @@ Each command performs a single operation independently. `--json` outputs structu
 
 ```bash
 inkos agent "Write a LitRPG novel where the MC is a healer class in a dungeon world"
-inkos agent "Write the next chapter, focus on the boss fight"
-inkos agent "Scan market trends first, then create a new book based on results"
+inkos agent "Write the next chapter, focus on the boss fight and loot distribution"
+inkos agent "Create a progression fantasy about a mage who can only use one spell"
 ```
 
 13 built-in tools (write_draft, audit_chapter, revise_chapter, scan_market, create_book, get_book_status, read_truth_files, list_books, write_full_pipeline, web_fetch, import_style, import_canon, import_chapters), with the LLM deciding call order via tool-use.
@@ -257,12 +264,12 @@ inkos agent "Scan market trends first, then create a new book based on results"
 | Command | Description |
 |---------|-------------|
 | `inkos init [name]` | Initialize project (omit name to init current directory) |
-| `inkos book create` | Create a new book (`--genre`, `--platform`, `--chapter-words`, `--target-chapters`, `--brief <file>`, `--lang en/zh`) |
+| `inkos book create` | Create a new book (`--genre`, `--chapter-words`, `--target-chapters`, `--brief <file>`, `--lang en/zh`) |
 | `inkos book update [id]` | Update book settings (`--chapter-words`, `--target-chapters`, `--status`, `--lang`) |
 | `inkos book list` | List all books |
 | `inkos genre list/show/copy/create` | View, copy, or create genres |
 | `inkos write next [id]` | Full pipeline: write next chapter (`--words` to override, `--count` for batch, `-q` quiet mode) |
-| `inkos write rewrite [id] <n>` | Rewrite chapter N (restores state snapshot, `--force` to skip confirmation, `--words` to override) |
+| `inkos write rewrite [id] <n>` | Rewrite chapter N (restores state snapshot, `--force` to skip confirmation) |
 | `inkos draft [id]` | Write draft only (`--words` to override word count, `-q` quiet mode) |
 | `inkos audit [id] [n]` | Audit a specific chapter |
 | `inkos revise [id] [n]` | Revise a specific chapter |
@@ -271,32 +278,26 @@ inkos agent "Scan market trends first, then create a new book based on results"
 | `inkos review approve-all [id]` | Batch approve |
 | `inkos status [id]` | Project status |
 | `inkos export [id]` | Export book (`--format txt/md/epub`, `--output <path>`, `--approved-only`) |
-| `inkos radar scan` | Scan platform trends |
 | `inkos fanfic init` | Create a fanfic book from source material (`--from`, `--mode canon/au/ooc/cp`) |
 | `inkos config set-global` | Set global LLM config (~/.inkos/.env) |
-| `inkos config show-global` | Show global config |
-| `inkos config set/show` | View/update project config |
-| `inkos config set-model <agent> <model>` | Set model override for a specific agent (`--base-url`, `--provider`, `--api-key-env` for multi-provider routing) |
-| `inkos config remove-model <agent>` | Remove agent model override (fall back to default) |
+| `inkos config set-model <agent> <model>` | Per-agent model override (`--base-url`, `--provider`, `--api-key-env`) |
 | `inkos config show-models` | Show current model routing |
 | `inkos doctor` | Diagnose setup issues (API connectivity test + provider compatibility hints) |
 | `inkos detect [id] [n]` | AIGC detection (`--all` for all chapters, `--stats` for statistics) |
 | `inkos style analyze <file>` | Analyze reference text to extract style fingerprint |
 | `inkos style import <file> [id]` | Import style fingerprint into a book |
-| `inkos import canon [id] --from <parent>` | Import parent canon for spinoff writing |
 | `inkos import chapters [id] --from <path>` | Import existing chapters for continuation (`--split`, `--resume-from`) |
 | `inkos analytics [id]` / `inkos stats [id]` | Book analytics (audit pass rate, top issues, chapter ranking, token usage) |
-| `inkos update` | Update to latest version |
 | `inkos up / down` | Start/stop daemon (`-q` quiet mode, auto-writes `inkos.log`) |
 
-`[id]` is auto-detected when the project has only one book. All commands support `--json` for structured output. `draft`/`write next` support `--context` for writing guidance and `--words` to override per-chapter word count. `book create` supports `--brief <file>` to pass a creative brief (your brainstorming/worldbuilding doc) — the Architect builds from your ideas instead of generating from scratch.
+`[id]` is auto-detected when the project has only one book. All commands support `--json` for structured output. `book create` supports `--brief <file>` to pass a creative brief — the Architect builds from your ideas instead of generating from scratch.
 
 ## Roadmap
 
 - [ ] `packages/studio` Web UI for review and editing (Vite + React + Hono)
 - [ ] Partial chapter intervention (rewrite half a chapter + cascade truth file updates)
+- [ ] Novel-to-comic pipeline (truth files → storyboard → manga pages)
 - [ ] Custom agent plugin system
-- [ ] Platform-specific export (Qidian, Tomato, etc.)
 
 ## Contributing
 
