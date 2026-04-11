@@ -1,0 +1,16 @@
+{
+  "name": "@actalk/inkos-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "InkOS Desktop — local-first AI novel writing workbench",
+  "scripts": {
+    "dev": "cargo tauri dev",
+    "build": "cargo tauri build",
+    "tauri": "cargo tauri"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.0.0",
+    "@tauri-apps/plugin-dialog": "^2.0.0",
+    "@tauri-apps/plugin-fs": "^2.0.0"
+  }
+}

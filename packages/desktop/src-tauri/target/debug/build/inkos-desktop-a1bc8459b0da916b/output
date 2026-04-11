@@ -1,0 +1,18 @@
+cargo:rerun-if-env-changed=TAURI_CONFIG
+cargo:rustc-check-cfg=cfg(desktop)
+cargo:rustc-cfg=desktop
+cargo:rustc-check-cfg=cfg(mobile)
+cargo:rerun-if-changed=D:\DESKTOP\sub2api\inkos-master\packages\desktop\src-tauri\tauri.conf.json
+cargo:rustc-env=TAURI_ANDROID_PACKAGE_NAME_APP_NAME=inkos
+cargo:rustc-env=TAURI_ANDROID_PACKAGE_NAME_PREFIX=cc_vivy1024
+cargo:rustc-check-cfg=cfg(dev)
+cargo:rustc-cfg=dev
+cargo:PERMISSION_FILES_PATH=D:\DESKTOP\sub2api\inkos-master\packages\desktop\src-tauri\target\debug\build\inkos-desktop-a1bc8459b0da916b\out\app-manifest\__app__-permission-files
+cargo:rerun-if-changed=capabilities
+cargo:rerun-if-env-changed=REMOVE_UNUSED_COMMANDS
+cargo:rustc-env=TAURI_ENV_TARGET_TRIPLE=x86_64-pc-windows-msvc
+package.metadata does not exist
+Microsoft (R) Windows (R) Resource Compiler Version 10.0.10011.16384
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+cargo:rustc-link-arg-bins=D:\DESKTOP\sub2api\inkos-master\packages\desktop\src-tauri\target\debug\build\inkos-desktop-a1bc8459b0da916b\out\resource.lib
