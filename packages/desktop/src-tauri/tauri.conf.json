@@ -6,8 +6,8 @@
   "build": {
     "frontendDist": "../../studio/dist",
     "devUrl": "http://localhost:4567",
-    "beforeDevCommand": "",
-    "beforeBuildCommand": ""
+    "beforeDevCommand": "pnpm --filter @actalk/inkos-studio dev",
+    "beforeBuildCommand": "pnpm --filter @actalk/inkos-studio build:client"
   },
   "app": {
     "windows": [
