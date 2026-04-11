@@ -91,6 +91,11 @@ pub fn path_exists(path: String) -> bool {
 }
 
 #[tauri::command]
+pub fn create_dir_all(path: String) -> Result<(), String> {
+    fs::create_dir_all(&path).map_err(|e| e.to_string())
+}
+
+#[tauri::command]
 pub async fn select_workspace(app: tauri::AppHandle) -> Result<Option<String>, String> {
     let folder = app.dialog().file().blocking_pick_folder();
     Ok(folder.map(|p| p.to_string()))

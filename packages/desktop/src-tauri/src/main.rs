@@ -26,6 +26,7 @@ pub fn run() {
             list_dir,
             delete_path,
             path_exists,
+            create_dir_all,
             select_workspace,
             read_book_config,
         ])
