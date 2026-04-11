@@ -4,7 +4,7 @@
   "version": "0.1.0",
   "identifier": "cc.vivy1024.inkos",
   "build": {
-    "frontendDist": "../../studio/dist/client",
+    "frontendDist": "../../studio/dist",
     "devUrl": "http://localhost:4567",
     "beforeDevCommand": "",
     "beforeBuildCommand": ""
