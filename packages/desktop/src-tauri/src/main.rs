@@ -1,6 +1,7 @@
 mod commands;
 
 use commands::*;
+use tauri::Emitter;
 use tauri_plugin_deep_link::DeepLinkExt;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
