@@ -25,6 +25,13 @@
       "csp": null
     }
   },
+  "plugins": {
+    "deep-link": {
+      "desktop": {
+        "schemes": ["inkos"]
+      }
+    }
+  },
   "bundle": {
     "active": true,
     "targets": "all",
